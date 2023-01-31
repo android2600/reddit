@@ -1,4 +1,4 @@
-import { Button, Flex, Input } from '@chakra-ui/react';
+import { Text,Button, Flex, Input } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { authModalState } from '../../../atoms/authModalAtom';
@@ -79,22 +79,22 @@ type LoginProps = {};
                 borderColor:"blue.500",
             }}
             bg="gray.50"/>
-        <text style={{textAlign:"center",color:"red",fontSize:"10pt"}}>{FIREBASE_ERRORS[error?.message as keyof typeof FIREBASE_ERRORS]}</text>
+        <Text style={{textAlign:"center",color:"red",fontSize:"10pt"}}>{FIREBASE_ERRORS[error?.message as keyof typeof FIREBASE_ERRORS]}</Text>
         
         <Button width="100%" height="36px" mt={2} mb={2} isLoading={loading} type="submit">Log In</Button>
         <Flex fontSize="9pt" justifyContent="center">
-            <text style={{margin:2}}> Forgot your password?</text>
-            <text 
+            <Text style={{margin:2}}> Forgot your password?</Text>
+            <Text 
             style={{cursor:"pointer",color:"blue",fontWeight:700,margin:2}} 
             onClick={()=>setAuthModalState(prev=>({...prev,view:"resetPassword"}))}>
-            Reset</text>
+            Reset</Text>
         </Flex>
         <Flex fontSize="9pt" justifyContent="center">
-            <text style={{margin:2}}> New here?</text>
-            <text 
+            <Text style={{margin:2}}> New here?</Text>
+            <Text 
             style={{cursor:"pointer",color:"blue",fontWeight:700,margin:2}} 
             onClick={()=>setAuthModalState(prev=>({...prev,view:"signup"}))}>
-            SIGN UP</text>
+            SIGN UP</Text>
         </Flex>
         </form>
         

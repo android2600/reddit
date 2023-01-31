@@ -1,4 +1,4 @@
-import { Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Text,Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilState } from 'recoil';
@@ -49,7 +49,7 @@ const AuthModal:React.FC = () => {
               {modalState.view==="login" || modalState.view==="signup" ? (
                 <>
                 <OAuthButton/>
-                <text style={{color:'grey', fontWeight:700}}>OR</text>
+                <Text style={{color:'grey', fontWeight:700}}>OR</Text>
                 <AuthInputs/>
                 </>
                 ):(<ResetPassword/>)}

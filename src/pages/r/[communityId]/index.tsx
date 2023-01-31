@@ -20,8 +20,8 @@ const CommunityPage:React.FC<CommunityPageProps> = ({communityData}) => {
         <>
         <Header communityData={communityData}/>
         <PageContent>
-            <><div>LHS</div></> {/*child1 LHS */}
-            <><div>RHS</div></> {/*child2 RHS ????*/}
+            <><div>LHS</div></> 
+            <><div>RHS</div></> 
         </PageContent>
         </>
     )

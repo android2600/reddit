@@ -51,7 +51,8 @@ const CreateCommunityModal:React.FC<CreateCommunityModalProps> = ({open,handleCl
                     setError(`Sorry r/${communityName} is taken. Try another.`)
                     return
                 }
-                await transaction.set(communityDocRef,{
+                
+                transaction.set(communityDocRef,{
                     creatorId: user?.uid,
                     createdAt:serverTimestamp(),
                     numberOfMembers:1,
