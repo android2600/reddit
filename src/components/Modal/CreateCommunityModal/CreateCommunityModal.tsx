@@ -1,9 +1,10 @@
 import { Input,Text,Box,Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Checkbox, Stack, Flex, Icon } from '@chakra-ui/react';
-import { doc, getDoc, serverTimestamp, setDoc } from '@firebase/firestore';
+import { doc, getDoc, runTransaction, serverTimestamp, setDoc } from '@firebase/firestore';
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import {BsFillEyeFill,BsFillPersonFill} from "react-icons/bs"
 import {HiLockClosed} from "react-icons/hi"
+import { setSourceMapRange } from 'typescript';
 import { auth, firestore } from '../../../firebase/clientApp';
 
 type CreateCommunityModalProps = {
@@ -30,35 +31,44 @@ const CreateCommunityModal:React.FC<CreateCommunityModalProps> = ({open,handleCl
 
     const handleCreateCommunity=async ()=>{
         //Validate Community name
+        
+        if (error) setError("")
         const format=/[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
         if (format.test(communityName) || communityName.length<3){
             setError("community name must be of 3-21 characters and can only contain letters, numbers and underscores")
             return
         }
         setLoading(true)
-        
         try {
             //Create the community Document in firestore
             //check the name is not taken
             //create valid community
             const communityDocRef=doc(firestore,"communities",communityName) //reference to doc
             
-            const communityDoc= await getDoc(communityDocRef)
-            if (communityDoc.exists()){
-                setError(`Sorry r/${communityName} is taken. Try another.`)
-                return
-            }
-            await setDoc(communityDocRef,{
-                creatorId: user?.uid,
-                createdAt:serverTimestamp(),
-                numberOfMembers:1,
-                privacyType: communityType,
+            await runTransaction(firestore,async(transaction)=>{
+                const communityDoc= await transaction.get(communityDocRef)
+                if (communityDoc.exists()){
+                    setError(`Sorry r/${communityName} is taken. Try another.`)
+                    return
+                }
+                await transaction.set(communityDocRef,{
+                    creatorId: user?.uid,
+                    createdAt:serverTimestamp(),
+                    numberOfMembers:1,
+                    privacyType: communityType,
+                })
+                transaction.set(doc(firestore,`user/${user?.uid}/communitySnippets`,communityName),
+                {
+                    communityId:communityName,
+                    isModerator:true
+                })
             })
+            
+            
         } catch (error:any) {
             console.log("handleCreateCommunity error",error)
             setError(error.message)
         }
-        
         setLoading(false)
     }
     return (
