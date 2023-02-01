@@ -3,8 +3,8 @@ import React from 'react';
 
 export default function PageContent({children}:any) {
     return (
-        <Flex border="1px solid red" justify="center" p="16px 0px">
-            <Flex border="1px solid green"
+        <Flex justify="center" p="16px 0px">
+            <Flex
             width="95%"
             justify="center"
             maxWidth="860px">
@@ -13,7 +13,7 @@ export default function PageContent({children}:any) {
                 direction="column"
                 width={{base:"100%", md:"65%"}}
                 mr={{base:0, md:6}}
-                border="1px solid blue">
+                >
                     {children && children[0 as keyof typeof children]}
                 </Flex>
                 {/*RHS*/}
@@ -21,7 +21,7 @@ export default function PageContent({children}:any) {
                 direction="column"
                 display={{base:"none",md:"flex"}}
                 flexGrow={1}
-                border="1px solid orange">
+                >
                     {children && children[1 as keyof typeof children]}
                 </Flex>
             </Flex>
