@@ -41,7 +41,7 @@ const useCommunityData = () => {
                 collection(firestore, `user/${user?.uid}/communitySnippets`)
               )) //Use query statement for firebase
             const snippets=snippetDocs.docs.map((doc) => ({ ...doc.data() }))
-            console.log("here are my snippets",snippets)
+            //console.log("here are my snippets",snippets)
             setCommunityStateValue((prev)=>({
                 ...prev,
                 mySnippets: snippets as CommunitySnippet[]
