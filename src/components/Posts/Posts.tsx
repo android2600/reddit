@@ -7,6 +7,7 @@ import { Post } from '../../atoms/postAtom';
 import { auth, firestore } from '../../firebase/clientApp';
 import usePosts from '../../hooks/usePosts';
 import PostItem from './PostItem';
+import PostLoader from './PostLoader';
 
 type PostsProps = {
     communityData: Community
@@ -20,6 +21,7 @@ const Posts:React.FC<PostsProps> = ({communityData}) => {
     
     const getPosts =async()=>{
         try {
+            setLoading(true)
             //get posts for this community
             const postsQuery=query(collection(firestore,'posts'),where("communityId","==",communityData.id),
             orderBy("createdAt","desc"))
@@ -33,6 +35,7 @@ const Posts:React.FC<PostsProps> = ({communityData}) => {
         } catch (error:any) {
             console.log("getPosts error",error.message)
         }
+        setLoading(false)
     }
 
     useEffect(()=>{
@@ -40,18 +43,24 @@ const Posts:React.FC<PostsProps> = ({communityData}) => {
     },[])
 
     return (
+    <>
+    {loading ? (
+    <PostLoader/>
+    ):(
     <Stack>
     {postStateValue.posts.map((item)=>(
         <PostItem 
         key={item.id}
         post={item} 
         userIsCreator={user?.uid===item.creatorId}
-        userVoteValue={undefined}
+        userVoteValue={postStateValue.postVotes.find((vote)=> vote.postId===item.id)?.voteValue}
         onVote={onVote}
         onSelectPost={onSelectPost} 
         onDeletePost={onDeletePost}/>
     ))}
     </Stack>
+    )}
+    </>
     )
 }
 export default Posts;
