@@ -1,4 +1,5 @@
 import { Box, Divider, Flex, Icon, MenuItem,Text } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaReddit } from 'react-icons/fa';
 import { GrAdd } from 'react-icons/gr';
@@ -12,6 +13,7 @@ type CommunitiesProps = {};
 const Communities:React.FC<CommunitiesProps> = () => {
     const [open,setOpen]=useState(false)
     const mySnippets=useRecoilValue(communityState).mySnippets
+    const router=useRouter()
     return (
         <>
         <CreateCommunityModal open={open} handleClose={()=>setOpen(false)}/>

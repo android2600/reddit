@@ -8,8 +8,6 @@ export type DirectoryMenuItem={
     icon:IconType
     iconColor:string
     imageURL?:string
-
-
 }
 
 interface DirectoryMenuState{

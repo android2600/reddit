@@ -106,6 +106,7 @@ const useCommunityData = () => {
         setCommunityStateValue(prev=>({
             ...prev,
             mySnippets:prev.mySnippets.filter((item)=>item.communityId!==communityId),
+            snippetsFetched:true
         }))
     } catch (error:any) {
         console.log("leaveCommunity error",error)
@@ -132,7 +133,8 @@ const useCommunityData = () => {
         if(!user) {
             setCommunityStateValue((prev)=>({
                 ...prev,
-                mySnippets:[]
+                mySnippets:[],
+                snippetsFetched:false
             }))
             return
         }
