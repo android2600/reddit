@@ -2,7 +2,10 @@ import { Stack } from "@chakra-ui/react";
 import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Post } from "../atoms/postAtom";
+import { Post, PostVote } from "../atoms/postAtom";
+import PersonalHome from "../components/Community/PersonalHome";
+import Premium from "../components/Community/Premium";
+import Recommendations from "../components/Community/Recommendations";
 import PageContent from "../components/Layout/PageContent";
 import PostItem from "../components/Posts/PostItem";
 import PostLoader from "../components/Posts/PostLoader";
@@ -65,7 +68,26 @@ export default function Home() {
     }
     setLoading(false)
   }
-  const getUserPostVotes=()=>{}
+  const getUserPostVotes=async()=>{
+    try {
+      const postIds=postStateValue.postVotes.map(post=>post.id)
+      const postVoteQuery=query(
+        collection(firestore,`user/${user?.uid}/postVotes`),
+        where("postId","in",postIds)
+      )
+      const postVoteDocs=await getDocs(postVoteQuery)
+      const postVotes=postVoteDocs.docs.map((doc)=>({
+        id:doc.id,
+        ...doc.data()
+      }))
+      setPostStateValue((prev)=>({
+        ...prev,
+        postVotes:postVotes as PostVote[]
+      }))
+    } catch (error) {
+      console.log("getUserPostVotes error",error)
+    }
+  }
 
   useEffect(()=>{
     if(!user && !loadingUser) buildNoUserHomeFeed()
@@ -75,6 +97,15 @@ export default function Home() {
     if(communityStateValue.snippetsFetched) buildUserHomeFeed()
   },[communityStateValue.snippetsFetched])
 
+  useEffect(()=>{
+    if(user && postStateValue.posts.length) getUserPostVotes()
+    return ()=>{
+      setPostStateValue(prev=>({
+        ...prev,
+        postVotes:[]
+      }))
+    }// return is clean up function
+  },[user,postStateValue.posts])
   return (
     <PageContent>
       <>
@@ -96,7 +127,13 @@ export default function Home() {
         </Stack>
       )}
       </>
-      <></>
+      <>
+      <Stack spacing={3}>
+      <Recommendations/>
+      <Premium/>
+      <PersonalHome/>
+      </Stack>
+      </>
     </PageContent>
   )
 }
