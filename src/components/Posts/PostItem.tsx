@@ -117,7 +117,7 @@ const PostItem:React.FC<PostItemProps> = (
                            <Icon as={BsDot} color="gray.500" fontSize={8}/>
                             </>
                         )}
-                        <Text>Posted by u/{post.creatorDisplayName}{moment(new Date(post.createdAt?.seconds*1000)).fromNow()}</Text>
+                        <Text>Posted by u/{post.creatorDisplayName}{" "}{moment(new Date(post.createdAt?.seconds*1000)).fromNow()}</Text>
                     </Stack>
                     <Text fontSize="12pt" fontWeight={600}>{post.title}</Text>
                     <Text fontSize="10pt">{post.body}</Text>
